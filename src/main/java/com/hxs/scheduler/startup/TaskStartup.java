@@ -3,6 +3,7 @@ package com.hxs.scheduler.startup;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.service.TaskService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
