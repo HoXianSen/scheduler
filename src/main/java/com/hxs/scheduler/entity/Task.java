@@ -32,5 +32,9 @@ public class Task implements Serializable {
   @Column(name = "cron")
   private String cron;
 
-  
+  private String group;
+
+  private String description;
+
+  private String name;
 }

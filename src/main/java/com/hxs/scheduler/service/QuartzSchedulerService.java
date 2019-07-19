@@ -15,8 +15,10 @@ public class QuartzSchedulerService {
 
     public void scheduleJob(Task task) throws SchedulerException {
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
-                .withDescription("").build();
+                .withIdentity(String.format("%d_%s", task.getId(), task.getName()), task.getGroup())
+                .withDescription(task.getDescription()).build();
         CronTrigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(String.format("%d_%s_[%s]", task.getId(), task.getName(), task.getCron()), task.getGroup())
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         scheduler.scheduleJob(jobDetail, trigger);
     }
