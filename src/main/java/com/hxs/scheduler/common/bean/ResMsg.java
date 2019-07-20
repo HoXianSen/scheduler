@@ -24,6 +24,11 @@ public class ResMsg {
         this.data = data;
     }
 
+    public ResMsg(Object data) {
+        this();
+        this.data = data;
+    }
+
     public static ResMsg normalFail(String reason) {
         ResMsg msg = new ResMsg(CommonCode.Fail);
         msg.setMsg(reason);
