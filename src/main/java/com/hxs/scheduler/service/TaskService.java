@@ -11,13 +11,19 @@ import java.util.List;
 public class TaskService {
     @Resource
     private TaskRepository taskRepository;
+    @Resource
+    private QuartzSchedulerService schedulerService;
 
     public List<Task> getAllTask() {
         List<Task> allTask = taskRepository.findAll();
         return allTask;
     }
 
-    public void addTask(Task task){
-        taskRepository.saveAndFlush(task);
+    public void addTask(Task task) throws Exception {
+        Task savedTask = taskRepository.saveAndFlush(task);
+        if (savedTask == null) {
+            throw new Exception("task保存失败");
+        }
+        schedulerService.scheduleJob(task);
     }
 }

@@ -7,34 +7,54 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 
 @Table(name = "task")
-@Entity
 @Data
+@Entity
 public class Task implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", insertable = false, nullable = false)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, nullable = false)
+    private Integer id;
 
-  /**
-   * 命令
-   */
-  @Column(name = "cmd")
-  private String cmd;
+    /**
+     * 任务执行的命令
+     */
+    @NotNull
+    @Column(name = "cmd")
+    private String cmd;
 
-  /**
-   * cron表达式
-   */
-  @Column(name = "cron")
-  private String cron;
+    /**
+     * cron表达式
+     */
+    @NotNull
+    @Column(name = "cron")
+    private String cron;
 
-  private String group;
+    /**
+     * 名字
+     */
+    @NotNull
+    @Column(name = "name")
+    private String name;
 
-  private String description;
+    /**
+     * group可以代表哪个脚本的任务
+     */
+    @NotNull
+    @Column(name = "group")
+    private String group;
 
-  private String name;
+    /**
+     * 任务描述
+     */
+    @Column(name = "description")
+    private String description;
+
+
 }
