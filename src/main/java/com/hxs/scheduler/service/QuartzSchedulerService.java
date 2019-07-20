@@ -1,5 +1,6 @@
 package com.hxs.scheduler.service;
 
+import com.hxs.scheduler.common.JobDataMapConstants;
 import com.hxs.scheduler.common.util.DateFormatUtils;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.job.TaskJob;
@@ -21,7 +22,11 @@ public class QuartzSchedulerService {
         log.debug("开始scheduleJob，task={}", task);
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
                 .withIdentity(String.format("%d_%s", task.getId(), task.getName()), task.getGroup())
-                .withDescription(task.getDescription()).build();
+                .withDescription(task.getDescription())
+                .usingJobData(JobDataMapConstants.ID, task.getId())
+                .usingJobData(JobDataMapConstants.CMD, task.getCmd())
+                .usingJobData(JobDataMapConstants.NAME, task.getName())
+                .build();
         CronTrigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity(String.format("%d_%s", task.getId(), task.getName()), task.getGroup())
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
