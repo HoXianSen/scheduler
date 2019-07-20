@@ -12,7 +12,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 
 public class TaskJob implements Job {
-    private GlobalConfig globalConfig = BeanHelper.getBean(GlobalConfig.class);
+    private final GlobalConfig globalConfig = BeanHelper.getBean(GlobalConfig.class);
 
 
     @Override

@@ -1,7 +1,7 @@
 package com.hxs.scheduler.service;
 
 import com.hxs.scheduler.common.KeyConstant;
-import com.hxs.scheduler.common.util.DateFormatUtils;
+import com.hxs.scheduler.common.util.DateFormatHelper;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.job.TaskJob;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class QuartzSchedulerService {
                 .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         Date nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
-        log.info("scheduleJob成功，task={}，下次执行时间：{}", task, DateFormatUtils.yMdHms(nextFireTime));
+        log.info("scheduleJob成功，task={}，下次执行时间：{}", task, DateFormatHelper.yMdHms(nextFireTime));
     }
 
 }
