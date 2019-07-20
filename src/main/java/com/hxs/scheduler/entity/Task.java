@@ -40,15 +40,15 @@ public class Task implements Serializable {
      * 名字
      */
     @NotNull
-    @Column(name = "name")
-    private String name;
+    @Column(name = "taskName")
+    private String taskName;
 
     /**
      * group可以代表哪个脚本的任务
      */
     @NotNull
-    @Column(name = "group")
-    private String group;
+    @Column(name = "taskGroup")
+    private String taskGroup;
 
     /**
      * 任务描述
