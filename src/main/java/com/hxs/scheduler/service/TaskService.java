@@ -12,7 +12,7 @@ public class TaskService {
     @Resource
     private TaskRepository taskRepository;
     @Resource
-    private QuartzSchedulerService schedulerService;
+    private SchedulerService schedulerService;
 
     public List<Task> getAllTask() {
         List<Task> allTask = taskRepository.findAll();

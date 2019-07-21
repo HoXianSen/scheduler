@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Slf4j
 @Service("schedulerService")
-public class QuartzSchedulerService {
+public class SchedulerService {
     @Resource
     private Scheduler scheduler;
 
@@ -21,14 +21,14 @@ public class QuartzSchedulerService {
     public void scheduleJob(Task task) throws SchedulerException {
         log.debug("开始scheduleJob，task={}", task);
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
-                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
+                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getScriptName())
                 .withDescription(task.getDescription())
                 .usingJobData(KeyConstant.ID, task.getId())
                 .usingJobData(KeyConstant.CMD, task.getCmd())
                 .usingJobData(KeyConstant.NAME, task.getTaskName())
                 .build();
         CronTrigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
+                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getScriptName())
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         Date nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
         log.info("scheduleJob成功，task={}，下次执行时间：{}", task, DateFormatHelper.yMdHms(nextFireTime));
