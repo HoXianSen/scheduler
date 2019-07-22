@@ -44,8 +44,8 @@ public class Task implements Serializable {
   /**
    * 脚本名字
    */
-  @Column(name = "script_name")
-  private String scriptName;
+  @Column(name = "task_group")
+  private String taskGroup;
 
   /**
    * 任务描述
