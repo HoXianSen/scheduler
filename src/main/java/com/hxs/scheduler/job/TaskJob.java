@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class TaskJob implements Job {
-    private static final String CMD_PREFIX = "nohup ";
     private static final String CMD_SUFFIX = "> %s &";
 
     private final GlobalConfig config = BeanHelper.getBean(GlobalConfig.class);
@@ -22,7 +21,7 @@ public class TaskJob implements Job {
     public void execute(JobExecutionContext context) {
         JobDataMap jobDataMap = context.getMergedJobDataMap();
         String cmd = jobDataMap.getString(KeyConstant.CMD);
-        cmd = changeCmd(cmd, context.getJobDetail());
+        cmd = changeCmd(cmd, context.getTrigger());
         try {
             processService.execCmd(cmd);
         } catch (IOException e) {
@@ -30,12 +29,13 @@ public class TaskJob implements Job {
         }
     }
 
-    private String changeCmd(String cmd, JobDetail jobDetail) {
+    private String changeCmd(String cmd, Trigger trigger) {
+
         String logDir = config.getLogDir();
-        String logFileName = jobDetail.getKey().toString() + ".log";
+        String logFileName = trigger.getJobKey().toString() + "_" + trigger.getKey().toString() + ".log";
         String logFile = logDir + logFileName;
         String suffix = String.format(CMD_SUFFIX, logFile);
-        cmd = CMD_PREFIX + cmd + suffix;
+        cmd = cmd + suffix;
         return cmd;
     }
 

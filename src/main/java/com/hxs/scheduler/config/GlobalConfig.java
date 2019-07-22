@@ -22,7 +22,7 @@ public class GlobalConfig implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         File file = new File(scriptWorkspace);
         if (!file.isDirectory()) {
-            if (!file.mkdir()) {
+            if (!file.mkdirs()) {
                 throw new Exception("创建scriptWorkspace目录失败：" + scriptWorkspace);
             }
         }
@@ -32,9 +32,10 @@ public class GlobalConfig implements InitializingBean {
         if (!logDir.endsWith("/")) {
             logDir += "/";
         }
+
         File logDirFile = new File(logDir);
         if (!logDirFile.exists()) {
-            if (!logDirFile.mkdir()) {
+            if (!logDirFile.mkdirs()) {
                 throw new Exception("创建logDir目录失败：" + logDir);
             }
         }
