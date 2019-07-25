@@ -21,12 +21,12 @@ public class SchedulerService {
     public void scheduleJob(Task task) throws SchedulerException {
         log.debug("开始scheduleJob，task={}", task);
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
-                .withIdentity(String.format("%d-%s", task.getId(), task.getTaskName()), task.getTaskGroup())
+                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
                 .withDescription(task.getDescription())
                 .usingJobData(KeyConstant.CMD, task.getCmd())
                 .build();
         CronTrigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity(String.format("%d-%s", task.getId(), task.getTaskName()), task.getTaskGroup())
+                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         Date nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
         log.info("scheduleJob成功，jobKey={}，下次执行时间：{}", jobDetail.getKey(), DateFormatHelper.yMdHms(nextFireTime));
