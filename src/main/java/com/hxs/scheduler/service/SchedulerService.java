@@ -21,12 +21,12 @@ public class SchedulerService {
     public void scheduleJob(Task task) throws SchedulerException {
         log.debug("开始scheduleJob，task={}", task);
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
-                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
+                .withIdentity(getJobKey(task))
                 .withDescription(task.getDescription())
                 .usingJobData(KeyConstant.CMD, task.getCmd())
                 .build();
         CronTrigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
+                .withIdentity(getTriggerKey(task))
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         Date nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
         log.info("scheduleJob成功，jobKey={}，下次执行时间：{}", jobDetail.getKey(), DateFormatHelper.yMdHms(nextFireTime));
@@ -37,4 +37,19 @@ public class SchedulerService {
 
     }
 
+    public JobKey getJobKey(Task task) {
+        return getJobKey(task.getId());
+    }
+
+    public JobKey getJobKey(int id) {
+        return new JobKey(String.valueOf(id));
+    }
+
+    public TriggerKey getTriggerKey(Task task) {
+        return getTriggerKey(task.getId());
+    }
+
+    public TriggerKey getTriggerKey(int id) {
+        return new TriggerKey(String.valueOf(id));
+    }
 }
