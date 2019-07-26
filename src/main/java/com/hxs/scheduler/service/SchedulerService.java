@@ -10,16 +10,20 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service("schedulerService")
 public class SchedulerService {
     @Resource
     private Scheduler scheduler;
+    @Resource
+    private TaskService taskService;
 
 
     public void scheduleJob(Task task) throws SchedulerException {
-        log.debug("开始scheduleJob，task={}", task);
+        log.debug("开始scheduleJob，taskId={}", task.getId());
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
                 .withIdentity(getJobKey(task))
                 .withDescription(task.getDescription())
@@ -32,24 +36,57 @@ public class SchedulerService {
         log.info("scheduleJob成功，jobKey={}，下次执行时间：{}", jobDetail.getKey(), DateFormatHelper.yMdHms(nextFireTime));
     }
 
-    public void removeAllJobs() {
-        log.warn("移除scheduler中所有job！");
-
+    public boolean pauseJob(Task task) {
+        try {
+            scheduler.pauseJob(getJobKey(task));
+        } catch (SchedulerException e) {
+            log.error("pauseJob error", e);
+            return false;
+        }
+        return true;
     }
 
-    public JobKey getJobKey(Task task) {
-        return getJobKey(task.getId());
+    public boolean deleteJob(Task task) {
+        try {
+            return scheduler.deleteJob(getJobKey(task));
+        } catch (SchedulerException e) {
+            log.error("deleteJob error", e);
+            return false;
+        }
     }
 
-    public JobKey getJobKey(int id) {
-        return new JobKey(String.valueOf(id));
+    public boolean deleteAllJob() {
+        log.warn("删除所有Job！");
+        List<Task> allTask = taskService.getAllTask();
+        List<JobKey> jobKeys = allTask.stream()
+                .map(this::getJobKey)
+                .collect(Collectors.toList());
+        try {
+            return scheduler.deleteJobs(jobKeys);
+        } catch (SchedulerException e) {
+            log.error("deleteAllJob error", e);
+            return false;
+        }
     }
 
-    public TriggerKey getTriggerKey(Task task) {
-        return getTriggerKey(task.getId());
+    public boolean pauseAllJob() {
+        try {
+            scheduler.pauseAll();
+        } catch (SchedulerException e) {
+            log.error("pauseAllJob error", e);
+            return false;
+        }
+        return true;
     }
 
-    public TriggerKey getTriggerKey(int id) {
-        return new TriggerKey(String.valueOf(id));
+
+    private JobKey getJobKey(Task task) {
+        return new JobKey(String.valueOf(task.getId()));
     }
+
+
+    private TriggerKey getTriggerKey(Task task) {
+        return new TriggerKey(String.valueOf(task.getId()));
+    }
+
 }
