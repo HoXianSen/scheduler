@@ -4,6 +4,7 @@ import com.hxs.scheduler.common.KeyConstant;
 import com.hxs.scheduler.common.util.DateFormatHelper;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.job.TaskJob;
+import com.hxs.scheduler.service.exception.SchedulerServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,14 @@ public class SchedulerService {
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         Date nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
         log.info("scheduleJob成功，jobKey={}，下次执行时间：{}", jobDetail.getKey(), DateFormatHelper.yMdHms(nextFireTime));
+    }
+
+    public void resumeJob(Task task) {
+        try {
+            scheduler.resumeJob(getJobKey(task));
+        } catch (SchedulerException e) {
+            throw new SchedulerServiceException("", e);
+        }
     }
 
     public boolean pauseJob(Task task) {

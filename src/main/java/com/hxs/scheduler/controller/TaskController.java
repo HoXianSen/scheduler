@@ -6,10 +6,12 @@ import com.hxs.scheduler.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 
 @Slf4j
 @RestController
@@ -27,6 +29,24 @@ public class TaskController {
             log.error("添加Task异常", e);
             return ResMsg.normalFail(e.getMessage());
         }
+        return ResMsg.SUCCESS;
+    }
+
+    @GetMapping("/pause/{id}")
+    public ResMsg pauseTask(@PathVariable @NotNull Integer id) {
+        taskService.pauseTask(id);
+        return ResMsg.SUCCESS;
+    }
+
+    @GetMapping("/start/{id}")
+    public ResMsg startTask(@PathVariable @NotNull Integer id) {
+        taskService.startTask(id);
+        return ResMsg.SUCCESS;
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResMsg deleteTask(@PathVariable @NotNull Integer id) {
+        taskService.deleteTask(id);
         return ResMsg.SUCCESS;
     }
 }
