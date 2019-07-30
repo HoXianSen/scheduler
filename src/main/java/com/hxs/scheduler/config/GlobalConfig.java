@@ -13,31 +13,38 @@ import java.io.File;
 @Slf4j
 public class GlobalConfig implements InitializingBean {
     private File processDir;
+    private String charset = "utf-8";
     @Value("${spring.servlet.multipart.location}")
-    private String scriptWorkspace;
+    private String scriptLocation;
     @Value("${scheduler.log-location}")
-    private String absLogDir;
+    private String logLocation;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        File file = new File(scriptWorkspace);
+        File file = new File(scriptLocation);
         if (!file.isDirectory()) {
             if (!file.mkdirs()) {
-                throw new Exception("创建scriptWorkspace目录失败：" + scriptWorkspace);
+                throw new Exception("创建scriptWorkspace目录失败：" + scriptLocation);
             }
         }
         this.processDir = file;
 
-        /*absLogDir*/
-        if (!absLogDir.endsWith("/")) {
-            absLogDir += "/";
+        /*logLocation*/
+        if (!logLocation.endsWith("/")) {
+            logLocation += "/";
         }
 
-        File logDirFile = new File(absLogDir);
+        File logDirFile = new File(logLocation);
         if (!logDirFile.exists()) {
             if (!logDirFile.mkdirs()) {
-                throw new Exception("创建logDir目录失败：" + absLogDir);
+                throw new Exception("创建logDir目录失败：" + logLocation);
             }
+        }
+
+        /*charset*/
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.startsWith("win")) {
+            charset = "GBK";
         }
     }
 }

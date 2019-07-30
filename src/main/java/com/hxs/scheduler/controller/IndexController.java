@@ -16,7 +16,7 @@ public class IndexController {
     @GetMapping("test")
     public ResMsg test() {
         GlobalConfig bean = BeanHelper.getBean(GlobalConfig.class);
-        System.out.println(bean.getAbsLogDir());
+        System.out.println(bean.getLogLocation());
         return ResMsg.SUCCESS;
     }
 }

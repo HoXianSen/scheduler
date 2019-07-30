@@ -1,6 +1,5 @@
 package com.hxs.scheduler.job;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hxs.scheduler.common.KeyConstant;
 import com.hxs.scheduler.common.util.BeanHelper;
 import com.hxs.scheduler.common.util.DateFormatHelper;
@@ -10,20 +9,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class TaskJob implements Job {
-    private static final String CMD_SUFFIX = "> %s";
     private static final String LOG_SUFFIX = ".log";
-    private static String CMD_PREFIX;
+    private static String CMD_PREFIX = "";
 
     static {
         String os = System.getProperty("os.name").toLowerCase();
         if (os.startsWith("win")) {
             CMD_PREFIX = "cmd /c ";
-        } else {
-            CMD_PREFIX = "bash -c ";
         }
     }
 
@@ -34,29 +32,32 @@ public class TaskJob implements Job {
     public void execute(JobExecutionContext context) {
         JobDataMap jobDataMap = context.getMergedJobDataMap();
         String cmd = jobDataMap.getString(KeyConstant.CMD);
-        int id = jobDataMap.getInt(KeyConstant.ID);
-        cmd = wrapCmd(cmd, context.getTrigger(), id);
-        log.info("JobExecute，jobDataMap={}", JSONObject.toJSONString(jobDataMap));
-        processService.execCmd(cmd);
+        String logFilePath = getLogFilePath(context.getJobDetail());
+        File logFile = new File(logFilePath);
+        if (!logFile.exists()) {
+            try {
+                if (!logFile.createNewFile()) {
+                    log.error("创建日志文件失败，logFilePath={}", logFilePath);
+                    return;
+                }
+            } catch (IOException e) {
+                log.error(String.format("创建日志文件异常，logFilePath=%s", logFilePath), e);
+            }
+        }
+        cmd = CMD_PREFIX + cmd;
+        processService.execCmd(cmd, logFile);
     }
 
-    private String wrapCmd(String cmd, Trigger trigger, int taskId) {
-
-        String logDir = config.getAbsLogDir();
-        String logFileName = trigger.getJobKey() +
-                "@" + taskId +
-                "#" +
-                DateFormatHelper.yMdHms(trigger.getStartTime()) +
-                LOG_SUFFIX;
+    private String getLogFilePath(JobDetail jobDetail) {
+        String logDir = config.getLogLocation();
+        String logFileName = jobDetail.getKey() + LOG_SUFFIX;
         logFileName = logFileName.replaceAll(" +", "_");
-        String logFile = logDir + logFileName;
-        String suffix = String.format(CMD_SUFFIX, logFile);
-        cmd = CMD_PREFIX + cmd + suffix;
-        return cmd;
+        String logFilePath = logDir + logFileName;
+        return logFilePath;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        final Process process = Runtime.getRuntime().exec("cmd /c python hello.py", null, new File("G:/tmp"));
+        final Process process = Runtime.getRuntime().exec("cmd /c python hello.py", null, new File("G:/tmp/script"));
         new Thread(() -> {
             try {
                 InputStream in = process.getInputStream();

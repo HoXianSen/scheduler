@@ -8,7 +8,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 @Configuration
 public class BeanConfiguration {
 
-    @Bean(destroyMethod = "shutdown")
+    @Bean
     public Scheduler scheduler(SchedulerFactoryBean schedulerFactory) {
         return schedulerFactory.getScheduler();
     }

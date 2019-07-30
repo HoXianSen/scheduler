@@ -13,4 +13,8 @@ public class DateFormatHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
     }
+
+    public static String now_yMdHms() {
+        return yMdHms(new Date());
+    }
 }
