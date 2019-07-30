@@ -72,7 +72,7 @@ public class ProcessService {
         InputStreamReader isr = new InputStreamReader(is, config.getCharset());
         BufferedReader reader = new BufferedReader(isr);
         FileWriter fileWriter = new FileWriter(logFile, true);
-        fileWriter.append("\n\n\n");
+        fileWriter.append("\n\n");
         fileWriter.append(DateFormatHelper.now_yMdHms());
         reader.lines().forEach(line -> {
             try {
