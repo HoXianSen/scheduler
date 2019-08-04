@@ -1,6 +1,6 @@
 package com.hxs.scheduler.common.bean;
 
-public enum CommonCode implements ResCode {
+public enum CommonCode implements ErrCode {
     UnknownError(-1, ""),
     Success(0, ""),
     Fail(1, ""),

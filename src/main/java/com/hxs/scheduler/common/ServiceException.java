@@ -1,19 +1,19 @@
 package com.hxs.scheduler.common;
 
-import com.hxs.scheduler.common.bean.ResCode;
+import com.hxs.scheduler.common.bean.ErrCode;
 
 public class ServiceException extends RuntimeException {
-    private ResCode resCode;
+    private ErrCode errCode;
 
-    public ServiceException(ResCode resCode) {
-        super(resCode.getMsg());
+    public ServiceException(ErrCode errCode) {
+        super(errCode.getMsg());
     }
 
-    public ServiceException(ResCode resCode, Throwable cause) {
-        super(resCode.getMsg(), cause);
+    public ServiceException(ErrCode errCode, Throwable cause) {
+        super(errCode.getMsg(), cause);
     }
 
-    public ResCode getResCode() {
-        return resCode;
+    public ErrCode getErrCode() {
+        return errCode;
     }
 }

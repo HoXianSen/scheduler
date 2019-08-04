@@ -1,5 +1,6 @@
 package com.hxs.scheduler.service;
 
+import com.hxs.scheduler.common.ServiceException;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.repository.TaskRepository;
 import org.quartz.SchedulerException;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+
+import static com.hxs.scheduler.service.errcode.TaskServiceErrCode.*;
 
 @Service
 public class TaskService {
@@ -21,9 +24,13 @@ public class TaskService {
         return allTask;
     }
 
-    public void addTask(Task task) throws SchedulerException {
+    public void addTask(Task task) {
         taskRepository.saveAndFlush(task);
-        schedulerService.scheduleJob(task);
+        try {
+            schedulerService.scheduleJob(task);
+        } catch (SchedulerException e) {
+            throw new ServiceException(AddTaskFail, e);
+        }
     }
 
     public void startTask(Integer id) {

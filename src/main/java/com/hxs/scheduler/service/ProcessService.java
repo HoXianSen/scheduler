@@ -47,8 +47,6 @@ public class ProcessService {
 
     private void logProcessOut(Process process, File logFile) throws IOException {
         CharSink sink = Files.asCharSink(logFile, Charset.forName(config.getCharset()), FileWriteMode.APPEND);
-        sink.write(System.lineSeparator());
-        sink.write(System.lineSeparator());
         sink.write("[");
         sink.write(DateFormatHelper.now_yMdHms());
         sink.write("]");
@@ -56,6 +54,9 @@ public class ProcessService {
 
         logProcessInfo(process, sink);
         logProcessErr(process, sink);
+
+        sink.write(System.lineSeparator());
+        sink.write(System.lineSeparator());
     }
 
     private void logProcessInfo(Process process, CharSink sink) {

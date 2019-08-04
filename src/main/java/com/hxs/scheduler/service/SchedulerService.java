@@ -1,10 +1,10 @@
 package com.hxs.scheduler.service;
 
 import com.hxs.scheduler.common.KeyConstant;
+import com.hxs.scheduler.common.ServiceException;
 import com.hxs.scheduler.common.util.DateFormatHelper;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.job.TaskJob;
-import com.hxs.scheduler.service.exception.SchedulerServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.hxs.scheduler.service.errcode.SchedulerServiceErrCode.*;
 
 @Slf4j
 @Service("schedulerService")
@@ -41,51 +43,45 @@ public class SchedulerService {
         try {
             scheduler.resumeJob(getJobKey(task));
         } catch (SchedulerException e) {
-            throw new SchedulerServiceException("", e);
+            throw new ServiceException(ResumeJobFail, e);
         }
     }
 
-    public boolean pauseJob(Task task) {
+    public void pauseJob(Task task) {
         try {
             scheduler.pauseJob(getJobKey(task));
         } catch (SchedulerException e) {
-            log.error("pauseJob error", e);
-            return false;
+            throw new ServiceException(PauseJobFail, e);
         }
-        return true;
     }
 
-    public boolean deleteJob(Task task) {
+    public void deleteJob(Task task) {
         try {
-            return scheduler.deleteJob(getJobKey(task));
+            scheduler.deleteJob(getJobKey(task));
         } catch (SchedulerException e) {
-            log.error("deleteJob error", e);
-            return false;
+            throw new ServiceException(DeleteJobFail, e);
         }
     }
 
-    public boolean deleteAllJob() {
+    public void deleteAllJob() {
         log.warn("删除所有Job！");
         List<Task> allTask = taskService.getAllTask();
         List<JobKey> jobKeys = allTask.stream()
                 .map(this::getJobKey)
                 .collect(Collectors.toList());
         try {
-            return scheduler.deleteJobs(jobKeys);
+            scheduler.deleteJobs(jobKeys);
         } catch (SchedulerException e) {
-            log.error("deleteAllJob error", e);
-            return false;
+            throw new ServiceException(DeleteJobFail, e);
         }
     }
 
-    public boolean pauseAllJob() {
+    public void pauseAllJob() {
         try {
             scheduler.pauseAll();
         } catch (SchedulerException e) {
-            log.error("pauseAllJob error", e);
-            return false;
+            throw new ServiceException(PauseJobFail, e);
         }
-        return true;
     }
 
 

@@ -23,12 +23,7 @@ public class TaskController {
     @GetMapping("/add")
     public ResMsg addTask(@Validated Task task) {
         log.debug("添加任务Task，task={}", task);
-        try {
-            taskService.addTask(task);
-        } catch (Exception e) {
-            log.error("添加Task异常", e);
-            return ResMsg.normalFail(e.getMessage());
-        }
+        taskService.addTask(task);
         return ResMsg.SUCCESS;
     }
 

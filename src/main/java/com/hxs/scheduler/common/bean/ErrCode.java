@@ -1,6 +1,6 @@
 package com.hxs.scheduler.common.bean;
 
-public interface ResCode {
+public interface ErrCode {
     int getCode();
 
     String getMsg();

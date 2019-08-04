@@ -14,13 +14,13 @@ public class ResMsg {
         this(CommonCode.Success);
     }
 
-    public ResMsg(ResCode resCode) {
-        this.code = resCode.getCode();
-        this.msg = resCode.getMsg();
+    public ResMsg(ErrCode errCode) {
+        this.code = errCode.getCode();
+        this.msg = errCode.getMsg();
     }
 
-    public ResMsg(ResCode resCode, Object data) {
-        this(resCode);
+    public ResMsg(ErrCode errCode, Object data) {
+        this(errCode);
         this.data = data;
     }
 
