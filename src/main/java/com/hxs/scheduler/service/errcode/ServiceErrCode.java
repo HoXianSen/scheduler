@@ -6,8 +6,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum TaskServiceErrCode implements ErrCode {
-    AddTaskFail(200, "添加Task失败"),
+public enum ServiceErrCode implements ErrCode {
+    ResumeJobFail(100, "重启Job失败"),
+    PauseJobFail(101, "暂停Job失败"),
+    DeleteJobFail(102, "删除Job失败"),
+    ScheduleJobFail(103, "调度Job失败"),
     ;
     private final int code;
     private final String msg;

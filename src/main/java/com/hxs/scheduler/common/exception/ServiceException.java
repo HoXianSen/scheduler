@@ -1,4 +1,4 @@
-package com.hxs.scheduler.exception;
+package com.hxs.scheduler.common.exception;
 
 import com.hxs.scheduler.common.bean.ErrCode;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.hxs.scheduler.service;
 
 import com.hxs.scheduler.common.KeyConstant;
-import com.hxs.scheduler.common.ServiceException;
+import com.hxs.scheduler.common.exception.ServiceException;
 import com.hxs.scheduler.common.util.DateFormatHelper;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.job.TaskJob;
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hxs.scheduler.service.errcode.SchedulerServiceErrCode.*;
+import static com.hxs.scheduler.service.errcode.ServiceErrCode.*;
 
 @Slf4j
 @Service("schedulerService")
@@ -25,7 +25,7 @@ public class SchedulerService {
     private TaskService taskService;
 
 
-    public void scheduleJob(Task task) throws SchedulerException {
+    public void scheduleJob(Task task) {
         log.debug("开始scheduleJob，taskId={}", task.getId());
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
                 .withIdentity(getJobKey(task))
@@ -35,7 +35,12 @@ public class SchedulerService {
         CronTrigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity(getTriggerKey(task))
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
-        Date nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
+        Date nextFireTime = null;
+        try {
+            nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new ServiceException(ScheduleJobFail, e);
+        }
         log.info("scheduleJob成功，jobKey={}，下次执行时间：{}", jobDetail.getKey(), DateFormatHelper.yMdHms(nextFireTime));
     }
 
