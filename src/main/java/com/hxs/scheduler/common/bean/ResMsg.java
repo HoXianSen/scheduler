@@ -34,4 +34,8 @@ public class ResMsg {
         msg.setMsg(reason);
         return msg;
     }
+
+    public static ResMsg success(Object data) {
+        return new ResMsg(data);
+    }
 }

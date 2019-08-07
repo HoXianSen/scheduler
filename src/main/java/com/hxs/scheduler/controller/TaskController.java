@@ -37,6 +37,7 @@ public class TaskController {
         return ResMsg.SUCCESS;
     }
 
+
     @GetMapping("/delete/{id}")
     public ResMsg deleteTask(@PathVariable @NotNull Integer id) {
         taskService.deleteTask(id);
@@ -47,6 +48,6 @@ public class TaskController {
     public ResMsg getAll() {
         List<Task> allTask = taskService.getAllTask();
 
-        return ResMsg.SUCCESS;
+        return ResMsg.success(allTask);
     }
 }
