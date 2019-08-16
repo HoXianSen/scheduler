@@ -4,6 +4,7 @@ import com.hxs.scheduler.common.bean.ResMsg;
 import com.hxs.scheduler.entity.Task;
 import com.hxs.scheduler.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/add")
-    public ResMsg addTask(Task task) {
+    public ResMsg addTask(@Validated Task task) {
         log.debug("添加任务Task，task={}", task);
         try {
             taskService.addTask(task);

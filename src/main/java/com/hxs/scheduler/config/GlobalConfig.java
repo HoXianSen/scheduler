@@ -15,8 +15,8 @@ public class GlobalConfig implements InitializingBean {
     private File processDir;
     @Value("${spring.servlet.multipart.location}")
     private String scriptWorkspace;
-    @Value("${scheduler.log-dir}")
-    private String logDir;
+    @Value("${scheduler.log-location}")
+    private String absLogDir;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -28,15 +28,15 @@ public class GlobalConfig implements InitializingBean {
         }
         this.processDir = file;
 
-        /*logDir*/
-        if (!logDir.endsWith("/")) {
-            logDir += "/";
+        /*absLogDir*/
+        if (!absLogDir.endsWith("/")) {
+            absLogDir += "/";
         }
 
-        File logDirFile = new File(logDir);
+        File logDirFile = new File(absLogDir);
         if (!logDirFile.exists()) {
             if (!logDirFile.mkdirs()) {
-                throw new Exception("创建logDir目录失败：" + logDir);
+                throw new Exception("创建logDir目录失败：" + absLogDir);
             }
         }
     }

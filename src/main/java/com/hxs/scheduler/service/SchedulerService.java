@@ -25,13 +25,17 @@ public class SchedulerService {
                 .withDescription(task.getDescription())
                 .usingJobData(KeyConstant.ID, task.getId())
                 .usingJobData(KeyConstant.CMD, task.getCmd())
-                .usingJobData(KeyConstant.NAME, task.getTaskName())
                 .build();
         CronTrigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity(String.format("%d_%s", task.getId(), task.getTaskName()), task.getTaskGroup())
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         Date nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
         log.info("scheduleJob成功，task={}，下次执行时间：{}", task, DateFormatHelper.yMdHms(nextFireTime));
+    }
+
+    public void removeAllJobs() {
+        log.warn("移除scheduler中所有job！");
+
     }
 
 }
