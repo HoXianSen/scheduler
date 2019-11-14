@@ -1,18 +1,29 @@
 package com.hxs.scheduler.controller;
 
+import com.hxs.scheduler.bean.Param;
 import com.hxs.scheduler.common.bean.ResMsg;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+import java.util.List;
+
 @RequestMapping("/script")
+@Controller
 public class ScriptController {
+    @GetMapping("/")
+    public String index() {
+        return "upload_script";
+    }
+
     @PostMapping("/upload")
-    public ResMsg upload(@RequestBody MultipartFile scriptFile) {
-        if(scriptFile.isEmpty()){
-            return ResMsg.normalFail("文件为空");
+    @ResponseBody
+    public ResMsg upload(@RequestBody MultipartFile file, List<Param> params) {
+        if (file.isEmpty()) {
+            return ResMsg.fail("文件为空");
         }
-        String scriptName = scriptFile.getName();
-        return ResMsg.SUCCESS;
+        String name = file.getName();
+        return ResMsg.success();
     }
 }

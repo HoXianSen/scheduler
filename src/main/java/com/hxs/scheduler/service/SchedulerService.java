@@ -10,6 +10,7 @@ import org.quartz.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +22,8 @@ import static com.hxs.scheduler.service.errcode.ServiceErrCode.*;
 public class SchedulerService {
     @Resource
     private Scheduler scheduler;
-    @Resource
-    private TaskService taskService;
+//    @Resource
+//    private TaskService taskService;
 
 
     public void scheduleJob(Task task) {
@@ -70,7 +71,8 @@ public class SchedulerService {
 
     public void deleteAllJob() {
         log.warn("删除所有Job！");
-        List<Task> allTask = taskService.getAllTask();
+//        List<Task> allTask = taskService.getAllTask();
+        List<Task> allTask = Collections.emptyList();
         List<JobKey> jobKeys = allTask.stream()
                 .map(this::getJobKey)
                 .collect(Collectors.toList());

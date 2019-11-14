@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexController {
     @GetMapping("/")
     public ResMsg index() {
-        return ResMsg.SUCCESS;
+        return ResMsg.success();
     }
 
-    @GetMapping("test")
+    @GetMapping("/test")
     public ResMsg test() {
         GlobalConfig bean = BeanHelper.getBean(GlobalConfig.class);
         System.out.println(bean.getLogLocation());
-        return ResMsg.SUCCESS;
+        return ResMsg.success();
     }
 }

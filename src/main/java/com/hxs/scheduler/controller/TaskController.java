@@ -2,7 +2,6 @@ package com.hxs.scheduler.controller;
 
 import com.hxs.scheduler.common.bean.ResMsg;
 import com.hxs.scheduler.entity.Task;
-import com.hxs.scheduler.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,39 +14,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/task")
 public class TaskController {
-    @Resource
-    private TaskService taskService;
+//    @Resource
+//    private TaskService taskService;
 
     @PutMapping("/add")
     public ResMsg addTask(@RequestBody @Validated Task task) {
         log.debug("添加任务Task，task={}", task);
-        taskService.addTask(task);
-        return ResMsg.SUCCESS;
+//        taskService.addTask(task);
+        return ResMsg.success();
     }
 
     @GetMapping("/pause/{id}")
     public ResMsg pauseTask(@PathVariable @NotNull Integer id) {
-        taskService.pauseTask(id);
-        return ResMsg.SUCCESS;
+//        taskService.pauseTask(id);
+        return ResMsg.success();
     }
 
     @GetMapping("/start/{id}")
     public ResMsg startTask(@PathVariable @NotNull Integer id) {
-        taskService.startTask(id);
-        return ResMsg.SUCCESS;
+//        taskService.startTask(id);
+        return ResMsg.success();
     }
 
 
     @GetMapping("/delete/{id}")
     public ResMsg deleteTask(@PathVariable @NotNull Integer id) {
-        taskService.deleteTask(id);
-        return ResMsg.SUCCESS;
+//        taskService.deleteTask(id);
+        return ResMsg.success();
     }
 
     @GetMapping("/all")
     public ResMsg getAll() {
-        List<Task> allTask = taskService.getAllTask();
+//        List<Task> allTask = taskService.getAllTask();
 
-        return ResMsg.success(allTask);
+        return ResMsg.success();
     }
 }

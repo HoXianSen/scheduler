@@ -4,38 +4,27 @@ import lombok.Data;
 
 @Data
 public class ResMsg {
-    public transient static final ResMsg SUCCESS = new ResMsg();
-    public transient static final ResMsg UNKNOWN_ERROR = new ResMsg();
-    private int code;
+    private boolean success;
     private String msg;
     private Object data;
 
-    public ResMsg() {
-        this(CommonCode.Success);
+    public ResMsg(boolean success) {
+        this.success = success;
     }
 
-    public ResMsg(ErrCode errCode) {
-        this.code = errCode.getCode();
-        this.msg = errCode.getMsg();
-    }
-
-    public ResMsg(ErrCode errCode, Object data) {
-        this(errCode);
-        this.data = data;
-    }
-
-    public ResMsg(Object data) {
-        this();
-        this.data = data;
-    }
-
-    public static ResMsg normalFail(String reason) {
-        ResMsg msg = new ResMsg(CommonCode.Fail);
+    public static ResMsg fail(String reason) {
+        ResMsg msg = new ResMsg(false);
         msg.setMsg(reason);
         return msg;
     }
 
+    public static ResMsg success() {
+        return new ResMsg(true);
+    }
+
     public static ResMsg success(Object data) {
-        return new ResMsg(data);
+        ResMsg msg = new ResMsg(true);
+        msg.setData(data);
+        return msg;
     }
 }
