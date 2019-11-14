@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/script")
@@ -19,11 +20,12 @@ public class ScriptController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public ResMsg upload(@RequestBody MultipartFile file, List<Param> params) {
-        if (file.isEmpty()) {
+    public ResMsg upload(@RequestBody MultipartFile script, ArrayList<Param> params) {
+        if (script.isEmpty()) {
             return ResMsg.fail("文件为空");
         }
-        String name = file.getName();
+        String name = script.getName();
+        System.out.println(name);
         return ResMsg.success();
     }
 }
