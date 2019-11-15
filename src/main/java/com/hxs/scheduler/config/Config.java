@@ -11,16 +11,23 @@ import java.io.File;
 @Data
 @Configuration
 @Slf4j
-public class GlobalConfig implements InitializingBean {
-    private File processDir;
-    private String charset = "utf-8";
-    @Value("${spring.servlet.multipart.location}")
+public class Config implements InitializingBean {
+    @Value("${scheduler.script-location}")
     private String scriptLocation;
-    @Value("${scheduler.log-location}")
+
+    /**
+     * 脚本运行目录
+     */
+    private File processDir;
+    private String charset;
     private String logLocation;
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        /*scriptLocation*/
+        if (!scriptLocation.endsWith("/")) {
+            scriptLocation += "/";
+        }
         File file = new File(scriptLocation);
         if (!file.isDirectory()) {
             if (!file.mkdirs()) {
@@ -29,10 +36,8 @@ public class GlobalConfig implements InitializingBean {
         }
         this.processDir = file;
 
-        /*logLocation*/
-        if (!logLocation.endsWith("/")) {
-            logLocation += "/";
-        }
+
+        logLocation = scriptLocation + "log/";
 
         File logDirFile = new File(logLocation);
         if (!logDirFile.exists()) {
@@ -45,6 +50,8 @@ public class GlobalConfig implements InitializingBean {
         String os = System.getProperty("os.name").toLowerCase();
         if (os.startsWith("win")) {
             charset = "GBK";
+        } else {
+            charset = "utf-8";
         }
     }
 }

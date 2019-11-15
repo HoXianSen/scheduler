@@ -2,7 +2,7 @@ package com.hxs.scheduler.controller;
 
 import com.hxs.scheduler.common.bean.ResMsg;
 import com.hxs.scheduler.common.util.BeanHelper;
-import com.hxs.scheduler.config.GlobalConfig;
+import com.hxs.scheduler.config.Config;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -15,7 +15,7 @@ public class IndexController {
 
     @GetMapping("/test")
     public ResMsg test() {
-        GlobalConfig bean = BeanHelper.getBean(GlobalConfig.class);
+        Config bean = BeanHelper.getBean(Config.class);
         System.out.println(bean.getLogLocation());
         return ResMsg.success();
     }

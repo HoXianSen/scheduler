@@ -2,15 +2,12 @@ package com.hxs.scheduler.job;
 
 import com.hxs.scheduler.common.KeyConstant;
 import com.hxs.scheduler.common.util.BeanHelper;
-import com.hxs.scheduler.common.util.DateFormatHelper;
-import com.hxs.scheduler.config.GlobalConfig;
+import com.hxs.scheduler.config.Config;
 import com.hxs.scheduler.service.ProcessService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -25,7 +22,7 @@ public class TaskJob implements Job {
         }
     }
 
-    private final GlobalConfig config = BeanHelper.getBean(GlobalConfig.class);
+    private final Config config = BeanHelper.getBean(Config.class);
     private final ProcessService processService = BeanHelper.getBean(ProcessService.class);
 
     @Override

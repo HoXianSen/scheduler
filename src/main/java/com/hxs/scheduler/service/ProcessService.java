@@ -4,7 +4,7 @@ import com.google.common.io.CharSink;
 import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 import com.hxs.scheduler.common.util.DateFormatHelper;
-import com.hxs.scheduler.config.GlobalConfig;
+import com.hxs.scheduler.config.Config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class ProcessService {
     private final ThreadPoolExecutor processLogExecutor = new ThreadPoolExecutor(5, 10,
             1, TimeUnit.MINUTES, new ArrayBlockingQueue<>(50));
     @Resource
-    private GlobalConfig config;
+    private Config config;
 
     public void execCmd(String cmd, File logFile) {
         Runtime runtime = Runtime.getRuntime();
