@@ -1,6 +1,6 @@
 package com.hxs.scheduler.controller;
 
-import com.hxs.scheduler.bean.Param;
+import com.hxs.scheduler.bean.ScriptParams;
 import com.hxs.scheduler.common.bean.ResMsg;
 import com.hxs.scheduler.config.Config;
 import lombok.extern.slf4j.Slf4j;
@@ -28,23 +28,24 @@ public class ScriptController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public ResMsg upload(@RequestParam MultipartFile script, Param[] params) {
-        if (script == null || script.isEmpty()) {
-            return ResMsg.fail("上传文件为空");
-        }
-        String filename = script.getOriginalFilename();
-        String scriptLocation = config.getScriptLocation();
-        File scriptFile = new File(scriptLocation + filename);
-        try (FileOutputStream fos = new FileOutputStream(scriptFile);
-             InputStream is = script.getInputStream()) {
-            int read = 0;
-            while ((read = is.read()) != -1) {
-                fos.write(read);
-            }
-        } catch (IOException e) {
-            log.error("上传文件写入失败", e);
-            return ResMsg.fail("上传文件写入失败");
-        }
-        return ResMsg.success(scriptFile.getAbsolutePath());
+    public ResMsg upload(@RequestParam MultipartFile script, @RequestBody ScriptParams scriptParams) {
+//        if (script == null || script.isEmpty()) {
+//            return ResMsg.fail("上传文件为空");
+//        }
+//        String filename = script.getOriginalFilename();
+//        String scriptLocation = config.getScriptLocation();
+//        File scriptFile = new File(scriptLocation + filename);
+//        try (FileOutputStream fos = new FileOutputStream(scriptFile);
+//             InputStream is = script.getInputStream()) {
+//            int read = 0;
+//            while ((read = is.read()) != -1) {
+//                fos.write(read);
+//            }
+//        } catch (IOException e) {
+//            log.error("上传文件写入失败", e);
+//            return ResMsg.fail("上传文件写入失败");
+//        }
+//        return ResMsg.success(scriptFile.getAbsolutePath());
+        return ResMsg.success(scriptParams.toString());
     }
 }
