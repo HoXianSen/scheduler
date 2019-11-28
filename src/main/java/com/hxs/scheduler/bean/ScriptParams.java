@@ -10,8 +10,7 @@ public class ScriptParams {
 
     @Data
     public static class Param {
-        private String key;
-        private boolean need;
-        private String comment;
+        private String name;
+        private String defValue;
     }
 }

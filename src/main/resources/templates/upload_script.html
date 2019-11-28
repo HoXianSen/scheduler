@@ -5,9 +5,68 @@
     <title>UpLoadScript</title>
 </head>
 <body>
-<form action="/script/upload" method="post" enctype="multipart/form-data">
+<form id="upload" action="/script/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="script" value="上传脚本"/>
-    <input type="submit" value="提交"/>
+    <input type="hidden" id="scriptParams" name="scriptParams" value=""/>
+    <div id="params">
+        <label>脚本参数<button type="button" onclick="addParam()">+</button></label>
+    </div>
+    <input type="button" onclick="uploadSubmit()" value="提交"/>
 </form>
+<script type="application/javascript">
+    function addParam() {
+        var params = document.getElementById("params");
+        var param = document.createElement("div");
+        param.setAttribute("class", "param");
+        var name = document.createElement("input");
+        name.setAttribute("type", "text");
+        name.setAttribute("class", "param-input");
+        name.setAttribute("key", "name");
+        name.setAttribute("placeholder", "参数名");
+        var dftValue = document.createElement("input");
+        dftValue.setAttribute("type", "text");
+        dftValue.setAttribute("class", "param-input");
+        dftValue.setAttribute("key", "dftValue");
+        dftValue.setAttribute("placeholder", "默认值");
+        var delBtn = document.createElement("button");
+        delBtn.setAttribute("type", "button");
+        delBtn.addEventListener("click", delParam);
+        delBtn.innerHTML = "x";
+        param.appendChild(name);
+        param.appendChild(dftValue);
+        param.appendChild(delBtn);
+        params.appendChild(param);
+    }
+
+    function delParam() {
+        var params = document.getElementById("params");
+        params.removeChild(this.parentElement);
+    }
+
+    function uploadSubmit() {
+        var scriptParams = [];
+        var params = document.getElementsByClassName("param");
+        for (var i = 0; i < params.length; i++) {
+            var paramObj = {};
+            var param = params.item(i);
+            var paramInputs = param.getElementsByClassName("param-input");
+            for (var j = 0; j < paramInputs.length; j++) {
+                var input = paramInputs.item(j);
+                var name = input.getAttribute("key");
+                var value = input.value;
+                if (value == null || value === "") {
+                    continue;
+                }
+                paramObj[name] = value;
+            }
+            if (paramObj.hasOwnProperty('name')) {
+                scriptParams.push(paramObj);
+            }
+        }
+        console.log(JSON.stringify(scriptParams));
+        document.getElementById("scriptParams").value = JSON.stringify(scriptParams);
+        document.getElementById("upload").submit();
+    }
+</script>
 </body>
 </html>
