@@ -1,18 +1,19 @@
 package com.hxs.scheduler.controller;
 
-import com.hxs.scheduler.bean.ScriptParams;
+import com.alibaba.fastjson.JSON;
+import com.hxs.scheduler.bean.Param;
 import com.hxs.scheduler.common.bean.ResMsg;
 import com.hxs.scheduler.config.Config;
+import com.mysql.fabric.xmlrpc.base.Params;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @RequestMapping("/script")
 @Controller
@@ -28,7 +29,7 @@ public class ScriptController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public ResMsg upload(@RequestParam MultipartFile script, @RequestBody ScriptParams scriptParams) {
+    public ResMsg upload(@RequestParam MultipartFile script, @RequestParam String scriptParams) {
 //        if (script == null || script.isEmpty()) {
 //            return ResMsg.fail("上传文件为空");
 //        }
@@ -46,6 +47,7 @@ public class ScriptController {
 //            return ResMsg.fail("上传文件写入失败");
 //        }
 //        return ResMsg.success(scriptFile.getAbsolutePath());
-        return ResMsg.success(scriptParams.toString());
+        List<Param> params = JSON.parseArray(scriptParams, Param.class);
+        return ResMsg.success(Arrays.toString(params.toArray()));
     }
 }

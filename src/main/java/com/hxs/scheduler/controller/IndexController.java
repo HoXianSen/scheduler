@@ -1,6 +1,5 @@
 package com.hxs.scheduler.controller;
 
-import com.hxs.scheduler.bean.ScriptParams;
 import com.hxs.scheduler.common.bean.ResMsg;
 import com.hxs.scheduler.common.util.BeanHelper;
 import com.hxs.scheduler.config.Config;
@@ -16,11 +15,4 @@ public class IndexController {
         return "index/test";
     }
 
-    @RequestMapping("/test")
-    @ResponseBody
-    public ResMsg test(ScriptParams[] scriptParams) {
-        Config bean = BeanHelper.getBean(Config.class);
-        System.out.println(bean.getLogLocation());
-        return ResMsg.success(scriptParams);
-    }
 }
