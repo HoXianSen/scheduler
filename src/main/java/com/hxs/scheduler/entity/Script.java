@@ -8,6 +8,5 @@ import java.io.Serializable;
 public class Script implements Serializable {
     private Integer id;
     private String name;
-    private String path;
     private String params;
 }

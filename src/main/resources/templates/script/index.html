@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>params</th>
+        <th>op</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="script,stat : ${scripts}">
+        <td th:text="${script.id}"></td>
+        <td th:text="${script.name}"></td>
+        <td th:text="${script.params}"></td>
+        <td><button >+</button><button>×</button></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

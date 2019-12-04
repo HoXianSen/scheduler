@@ -1,5 +1,6 @@
 package com.hxs.scheduler.common.bean;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 
 @Data
@@ -25,6 +26,12 @@ public class ResMsg {
     public static ResMsg success(Object data) {
         ResMsg msg = new ResMsg(true);
         msg.setData(data);
+        return msg;
+    }
+
+    public static ResMsg success(Object... data) {
+        ResMsg msg = new ResMsg(true);
+        msg.setData(Lists.newArrayList(data));
         return msg;
     }
 }
