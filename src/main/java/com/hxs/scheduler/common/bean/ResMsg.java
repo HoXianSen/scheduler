@@ -19,17 +19,17 @@ public class ResMsg {
         return msg;
     }
 
-    public static ResMsg success() {
+    public static ResMsg ok() {
         return new ResMsg(true);
     }
 
-    public static ResMsg success(Object data) {
+    public static ResMsg ok(Object data) {
         ResMsg msg = new ResMsg(true);
         msg.setData(data);
         return msg;
     }
 
-    public static ResMsg success(Object... data) {
+    public static ResMsg ok(Object... data) {
         ResMsg msg = new ResMsg(true);
         msg.setData(Lists.newArrayList(data));
         return msg;

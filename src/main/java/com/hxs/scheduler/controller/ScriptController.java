@@ -34,6 +34,16 @@ public class ScriptController {
         return modelAndView;
     }
 
+    @GetMapping("/delete/{id}")
+    @ResponseBody
+    public ResMsg delete(@PathVariable("id") int id) {
+        if(id <= 0){
+            return ResMsg.fail("参数错误");
+        }
+        scriptMapper.deleteById(id);
+        return ResMsg.ok();
+    }
+
     @PostMapping("/upload")
     @ResponseBody
     public ResMsg upload(@RequestParam MultipartFile script, @RequestParam String scriptParams) {
@@ -54,6 +64,6 @@ public class ScriptController {
             return ResMsg.fail("上传文件写入失败");
         }
         scriptMapper.insert(filename, scriptParams);
-        return ResMsg.success(filename, scriptParams);
+        return ResMsg.ok(filename, scriptParams);
     }
 }

@@ -19,9 +19,15 @@
         <td th:text="${script.id}"></td>
         <td th:text="${script.name}"></td>
         <td th:text="${script.params}"></td>
-        <td><button >+</button><button>×</button></td>
+        <td>
+            <button th:onclick="">+</button>
+            <a th:href="/script/delete/${}">×</a>
+        </td>
     </tr>
     </tbody>
 </table>
+<script type="application/javascript">
+
+</script>
 </body>
 </html>

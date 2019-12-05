@@ -1,6 +1,7 @@
 package com.hxs.scheduler.mapper;
 
 import com.hxs.scheduler.entity.Script;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -14,4 +15,6 @@ public interface ScriptMapper {
     void insert(@Param("name") String name, @Param("params") String params);
     @Select("select * from `script`")
     List<Script> selectAllScripts();
+    @Delete("delete from `servers` where `id` = #{id}")
+    void deleteById(@Param("id") int id);
 }
