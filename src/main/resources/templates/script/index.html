@@ -5,6 +5,7 @@
     <title>Index</title>
 </head>
 <body>
+<a th:href="@{/script/upload}">上传</a>
 <table>
     <thead>
     <tr>
@@ -20,8 +21,8 @@
         <td th:text="${script.name}"></td>
         <td th:text="${script.params}"></td>
         <td>
-            <button th:onclick="">+</button>
-            <a th:href="/script/delete/${}">×</a>
+            <a th:href="@{'/task/create/' + ${script.id}}">+</a>
+            <a th:href="@{'/script/delete/' + ${script.id}}">×</a>
         </td>
     </tr>
     </tbody>

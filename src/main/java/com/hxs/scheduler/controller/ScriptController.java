@@ -37,7 +37,7 @@ public class ScriptController {
     @GetMapping("/delete/{id}")
     @ResponseBody
     public ResMsg delete(@PathVariable("id") int id) {
-        if(id <= 0){
+        if (id <= 0) {
             return ResMsg.fail("参数错误");
         }
         scriptMapper.deleteById(id);
@@ -65,5 +65,10 @@ public class ScriptController {
         }
         scriptMapper.insert(filename, scriptParams);
         return ResMsg.ok(filename, scriptParams);
+    }
+
+    @GetMapping("/upload")
+    public String upload() {
+        return "script/upload";
     }
 }

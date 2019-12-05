@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CREATE</title>
+</head>
+<body>
+<h3 th:text="${scriptVO.name}"></h3>
+<form th:action="@{/task/create}" method="post">
+    <input type="hidden" name="id" th:value="${scriptVO.id}"/>
+    <div th:each="par,stat : ${scriptVO.params}">
+        <label th:text="${par.name}"></label>
+        <input th:name="${par.name}" th:value="${par.dftValue}" type="text"/>
+    </div>
+    <input type="submit" value="创建"/>
+</form>
+</body>
+</html>

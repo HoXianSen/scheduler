@@ -15,6 +15,8 @@ public interface ScriptMapper {
     void insert(@Param("name") String name, @Param("params") String params);
     @Select("select * from `script`")
     List<Script> selectAllScripts();
-    @Delete("delete from `servers` where `id` = #{id}")
+    @Select("select * from `script` where `id`=#{id}")
+    Script selectById(@Param("id") int id);
+    @Delete("delete from `script` where `id` = #{id}")
     void deleteById(@Param("id") int id);
 }
