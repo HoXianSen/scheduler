@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,6 +30,13 @@ public class TaskController {
         ScriptVO scriptVO = new ScriptVO(script);
         modelAndView.addObject("scriptVO", scriptVO);
         return modelAndView;
+    }
+
+    @PostMapping("/create")
+    @ResponseBody
+    public ResMsg create(@RequestParam Map<String, String> paramMap) {
+
+        return ResMsg.ok();
     }
 
     @PutMapping("/add")
