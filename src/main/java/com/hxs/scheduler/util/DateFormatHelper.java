@@ -1,4 +1,4 @@
-package com.hxs.scheduler.common.util;
+package com.hxs.scheduler.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

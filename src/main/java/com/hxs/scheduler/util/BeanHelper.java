@@ -1,4 +1,4 @@
-package com.hxs.scheduler.common.util;
+package com.hxs.scheduler.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

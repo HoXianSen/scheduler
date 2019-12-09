@@ -1,7 +1,7 @@
 package com.hxs.scheduler.job;
 
-import com.hxs.scheduler.common.KeyConstant;
-import com.hxs.scheduler.common.util.BeanHelper;
+import com.hxs.scheduler.bean.Constant;
+import com.hxs.scheduler.util.BeanHelper;
 import com.hxs.scheduler.config.Config;
 import com.hxs.scheduler.service.ProcessService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class TaskJob implements Job {
     @Override
     public void execute(JobExecutionContext context) {
         JobDataMap jobDataMap = context.getMergedJobDataMap();
-        String cmd = jobDataMap.getString(KeyConstant.CMD);
+        String cmd = jobDataMap.getString(Constant.CMD);
         String logFilePath = getLogFilePath(context.getJobDetail());
         File logFile = new File(logFilePath);
         if (!logFile.exists()) {

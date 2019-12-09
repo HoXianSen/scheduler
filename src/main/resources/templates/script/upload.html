@@ -23,17 +23,17 @@
         name.setAttribute("class", "param-input");
         name.setAttribute("key", "name");
         name.setAttribute("placeholder", "参数名");
-        var dftValue = document.createElement("input");
-        dftValue.setAttribute("type", "text");
-        dftValue.setAttribute("class", "param-input");
-        dftValue.setAttribute("key", "dftValue");
-        dftValue.setAttribute("placeholder", "默认值");
+        var value = document.createElement("input");
+        value.setAttribute("type", "text");
+        value.setAttribute("class", "param-input");
+        value.setAttribute("key", "value");
+        value.setAttribute("placeholder", "默认值");
         var delBtn = document.createElement("button");
         delBtn.setAttribute("type", "button");
         delBtn.addEventListener("click", delParam);
         delBtn.innerHTML = "x";
         param.appendChild(name);
-        param.appendChild(dftValue);
+        param.appendChild(value);
         param.appendChild(delBtn);
         params.appendChild(param);
     }

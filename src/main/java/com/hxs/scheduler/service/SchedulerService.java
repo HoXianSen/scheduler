@@ -1,104 +1,72 @@
 package com.hxs.scheduler.service;
 
-import com.hxs.scheduler.common.KeyConstant;
-import com.hxs.scheduler.common.exception.ServiceException;
-import com.hxs.scheduler.common.util.DateFormatHelper;
-import com.hxs.scheduler.entity.Task;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.hxs.scheduler.bean.Constant;
+import com.hxs.scheduler.bean.ScriptTask;
 import com.hxs.scheduler.job.TaskJob;
+import com.hxs.scheduler.util.DateFormatHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.hxs.scheduler.service.errcode.ServiceErrCode.*;
+import java.util.Set;
 
 @Slf4j
 @Service("schedulerService")
 public class SchedulerService {
     @Resource
     private Scheduler scheduler;
-//    @Resource
-//    private TaskService taskService;
 
 
-    public void scheduleJob(Task task) {
-        log.debug("开始scheduleJob，taskId={}", task.getId());
+    public void scheduleTask(ScriptTask task) throws SchedulerException {
+        log.debug("开始scheduleJob，taskId={}", task.getScriptId());
         JobDetail jobDetail = JobBuilder.newJob(TaskJob.class)
                 .withIdentity(getJobKey(task))
-                .withDescription(task.getDescription())
-                .usingJobData(KeyConstant.CMD, task.getCmd())
+                .usingJobData(Constant.CMD, task.getCmd())
+                .usingJobData(Constant.CRON, task.getCron())
                 .build();
         CronTrigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity(getTriggerKey(task))
                 .withSchedule(CronScheduleBuilder.cronSchedule(task.getCron())).build();
         Date nextFireTime = null;
-        try {
-            nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
-        } catch (SchedulerException e) {
-            throw new ServiceException(ScheduleJobFail, e);
-        }
+        nextFireTime = scheduler.scheduleJob(jobDetail, trigger);
         log.info("scheduleJob成功，jobKey={}，下次执行时间：{}", jobDetail.getKey(), DateFormatHelper.yMdHms(nextFireTime));
     }
 
-    public void resumeJob(Task task) {
-        try {
-            scheduler.resumeJob(getJobKey(task));
-        } catch (SchedulerException e) {
-            throw new ServiceException(ResumeJobFail, e);
+    public Multimap getAllTask() throws SchedulerException {
+        List<String> groups = scheduler.getJobGroupNames();
+        Multimap<String, ScriptTask> tasks = ArrayListMultimap.create();
+        for (String group : groups) {
+            Set<JobKey> jobKeys = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(group));
+            for (JobKey jobKey : jobKeys) {
+                JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+                ScriptTask task = new ScriptTask();
+                task.setScriptId(jobKey.getGroup());
+                task.setTaskName(jobKey.getName());
+                task.setCron(jobDetail.getJobDataMap().getString(Constant.CRON));
+                task.setCmd(jobDetail.getJobDataMap().getString(Constant.CMD));
+                tasks.put(group, task);
+            }
         }
+        return tasks;
     }
 
-    public void pauseJob(Task task) {
-        try {
-            scheduler.pauseJob(getJobKey(task));
-        } catch (SchedulerException e) {
-            throw new ServiceException(PauseJobFail, e);
-        }
-    }
-
-    public void deleteJob(Task task) {
-        try {
-            scheduler.deleteJob(getJobKey(task));
-        } catch (SchedulerException e) {
-            throw new ServiceException(DeleteJobFail, e);
-        }
-    }
-
-    public void deleteAllJob() {
-        log.warn("删除所有Job！");
-//        List<Task> allTask = taskService.getAllTask();
-        List<Task> allTask = Collections.emptyList();
-        List<JobKey> jobKeys = allTask.stream()
-                .map(this::getJobKey)
-                .collect(Collectors.toList());
-        try {
-            scheduler.deleteJobs(jobKeys);
-        } catch (SchedulerException e) {
-            throw new ServiceException(DeleteJobFail, e);
-        }
-    }
-
-    public void pauseAllJob() {
-        try {
-            scheduler.pauseAll();
-        } catch (SchedulerException e) {
-            throw new ServiceException(PauseJobFail, e);
-        }
+    private JobKey getJobKey(ScriptTask task) {
+        String group = task.getScriptId();
+        String name = task.getTaskName();
+        return new JobKey(name, group);
     }
 
 
-    private JobKey getJobKey(Task task) {
-        return new JobKey(String.valueOf(task.getId()));
-    }
-
-
-    private TriggerKey getTriggerKey(Task task) {
-        return new TriggerKey(String.valueOf(task.getId()));
+    private TriggerKey getTriggerKey(ScriptTask task) {
+        String group = task.getScriptId();
+        String name = task.getTaskName();
+        return new TriggerKey(name, group);
     }
 
 }

@@ -211,10 +211,10 @@ CREATE TABLE `QRTZ_TRIGGERS`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for task
+-- Table structure for taskDTO
 -- ----------------------------
-DROP TABLE IF EXISTS `task`;
-CREATE TABLE `task`  (
+DROP TABLE IF EXISTS `taskDTO`;
+CREATE TABLE `taskDTO`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `cmd` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务执行的命令',
   `cron` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',

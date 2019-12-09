@@ -1,4 +1,4 @@
-package com.hxs.scheduler.common.bean;
+package com.hxs.scheduler.bean;
 
 import com.google.common.collect.Lists;
 import lombok.Data;

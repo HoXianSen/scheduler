@@ -21,7 +21,7 @@
         <td th:text="${script.name}"></td>
         <td th:text="${script.params}"></td>
         <td>
-            <a th:href="@{'/task/create/' + ${script.id}}">+</a>
+            <a th:href="@{'/taskDTO/create/' + ${script.id}}">+</a>
             <a th:href="@{'/script/delete/' + ${script.id}}">×</a>
         </td>
     </tr>

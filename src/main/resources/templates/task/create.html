@@ -6,13 +6,30 @@
 </head>
 <body>
 <h3 th:text="${scriptVO.name}"></h3>
-<form th:action="@{/task/create}" method="post">
-    <input type="hidden" name="id" th:value="${scriptVO.id}"/>
+<form th:action="@{/taskDTO/create}" method="post" id="createForm">
+    <input type="hidden" name="scriptId" th:value="${scriptVO.id}"/>
+    <input type="hidden" name="scriptName" th:value="${scriptVO.name}"/>
+    <input type="hidden" name="params" id="params"/>
+    <input type="text" name="cron"/>
     <div th:each="par,stat : ${scriptVO.params}">
         <label th:text="${par.name}"></label>
-        <input th:name="${par.name}" th:value="${par.dftValue}" type="text"/>
+        <input th:key="${par.name}" class="paramInput" th:value="${par.value}" type="text"/>
     </div>
-    <input type="submit" value="创建"/>
+    <input type="button" onclick="createFormSubmit()" value="创建"/>
 </form>
+<script type="application/javascript">
+    function createFormSubmit() {
+        var paramInputs = document.getElementsByClassName("paramInput");
+        var params = [];
+        for (var i=0;i<paramInputs.length;i++) {
+            var param = {};
+            var paramInput = paramInputs.item(i);
+            param[paramInput.getAttribute("key")] = paramInput.value;
+            params.push(param);
+        }
+        document.getElementById("params").value = JSON.stringify(params);
+        document.getElementById("createForm").submit();
+    }
+</script>
 </body>
 </html>

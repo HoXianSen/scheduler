@@ -1,9 +1,16 @@
 package com.hxs.scheduler.bean;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Param {
     private String name;
-    private String dftValue;
+    private String value;
+
+    @Override
+    public String toString() {
+        return name + "=" + value;
+    }
 }

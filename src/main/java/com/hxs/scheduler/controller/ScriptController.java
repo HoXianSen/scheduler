@@ -1,6 +1,6 @@
 package com.hxs.scheduler.controller;
 
-import com.hxs.scheduler.common.bean.ResMsg;
+import com.hxs.scheduler.bean.ResMsg;
 import com.hxs.scheduler.config.Config;
 import com.hxs.scheduler.entity.Script;
 import com.hxs.scheduler.mapper.ScriptMapper;
